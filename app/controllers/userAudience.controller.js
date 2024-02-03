@@ -201,6 +201,7 @@ function sendDataGA(res) {
   axios
     .request(config)
     .then((response) => {
+      console.log("send event from liffApp to GA4");
       console.log(JSON.stringify(response.data));
       res.send("send event -LineChatRoom- GA4 OK");
     })
