@@ -31,6 +31,7 @@ exports.createUserAudience = (req, res) => {
   const date = new Date();
   const _userAudience = new userAudience({
     userId: req.body.userId,
+    botUserId: req.body.botUserId,
     client_id: req.body.client_id,
     lineUid: req.body.lineUid,
     userAgent: req.body.userAgent,
@@ -141,18 +142,35 @@ exports.findIpAndUpdate = async (req, res) => {
 // find line user id from liff app and send data to GA4******
 exports.findLineUidSendToGA = async (req, res) => {
   const _lineUid = req.body.lineUid;
-  console.log("findLineUidSendToGA-->");
+  const _botUserId = req.body.botUserId;
+
+  const filter = { lineUid: _lineUid };
+  const update = { botUserId: _botUserId };
+
   await userAudience
-    .findOne({ lineUid: _lineUid })
-    .then((sendData) => {
-      console.log("get data from db-->:", sendData);
-      // send to GA4
-      sendDataGA(sendData, res);
-      //res.send(data);
+    .findOneAndUpdate(filter, update, {
+      new: true,
     })
-    .catch((err) => {
-      console.log(err);
+    .then((sendData) => {
+      if (sendData) {
+        sendDataGA(sendData, res);
+      } else {
+        res.send("NODATA AUDIENCE");
+      }
     });
+
+  // await userAudience
+  //   .findOne({ lineUid: _lineUid })
+  //   .then((sendData) => {
+  //     if (sendData) {
+  //       sendDataGA(sendData, res);
+  //     } else {
+  //       res.send("NODATA AUDIENCE");
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
 };
 
 function sendDataGA(getData, res) {
@@ -186,6 +204,7 @@ function sendDataGA(getData, res) {
           uniqueEventId: getData.uniqueEventId,
           sessionId: getData.sessionId,
           userId: getData.userId,
+          botUserId: getData.botUserId,
           userAgent: getData.userAgent,
           timeStamp: date,
         },

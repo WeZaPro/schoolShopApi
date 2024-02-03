@@ -12,6 +12,7 @@ module.exports = (mongoose) => {
       utm_medium: String,
       utm_term: String,
       lineUid: String,
+      botUserId: String,
     },
     { timestamps: true }
   );
