@@ -104,8 +104,9 @@ function confirmSaveDb(req, res, channelAccessToken) {
 }
 
 function setRegister(lineUserId) {
-  // var urlLiff = `line://app/1656824759-qbyK4305/path?botUserId=` + lineUserId;
-  var urlLiff = `line://app/1656824759-YxEy381k/path?botUserId=` + lineUserId; //แก้เป็น liff web a หน้าสำหรับ redirect
+  //var urlLiff = `line://app/1656824759-YxEy381k/path?botUserId=` + lineUserId;//ไปหน้า WebA / Cotact |  แก้เป็น liff web a หน้าสำหรับ redirect
+  var urlLiff =
+    `line://app/${process.env.liffApp}/path?botUserId=` + lineUserId; //ไปหน้า Liff App |แก้เป็น liff web a หน้าสำหรับ redirect
   console.log("urlLiff -> ", urlLiff);
   return [
     {
