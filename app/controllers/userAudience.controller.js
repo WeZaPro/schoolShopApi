@@ -123,6 +123,7 @@ exports.findOneAudience = async (req, res) => {
 // update line user id from liff web ******
 exports.findIpAndUpdate = async (req, res) => {
   const ip = req.body.ipAddress;
+  console.log("ip data--> ", ip);
   const _lineUid = req.body.lineUid;
   const filter = { ipAddress: ip };
   const update = { lineUid: _lineUid };
