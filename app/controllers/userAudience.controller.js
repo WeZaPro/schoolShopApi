@@ -143,10 +143,10 @@ exports.findLineUidSendToGA = async (req, res) => {
   console.log("findLineUidSendToGA-->");
   await userAudience
     .findOne({ lineUid: _lineUid })
-    .then((data) => {
-      console.log("get data from db-->:", data);
+    .then((sendData) => {
+      console.log("get data from db-->:", sendData);
       // send to GA4
-      sendDataGA(data, res);
+      sendDataGA(sendData, res);
       //res.send(data);
     })
     .catch((err) => {
@@ -154,17 +154,17 @@ exports.findLineUidSendToGA = async (req, res) => {
     });
 };
 
-function sendDataGA(data, res) {
+function sendDataGA(getData, res) {
   const date = new Date();
   // const _measurement_id = "G-75KFFSMBKP";
   // const _api_secret = "nk_Kg0X7R5W8hERJRekynQ";
   const _measurement_id = process.env.measurement_id;
   const _api_secret = process.env.api_secret;
   let data = JSON.stringify({
-    client_id: data.client_id,
+    client_id: getData.client_id,
     user_properties: {
       ipAddress: {
-        value: data.ipAddress,
+        value: getData.ipAddress,
       },
     },
     events: [
@@ -173,19 +173,19 @@ function sendDataGA(data, res) {
         params: {
           // campaign_id: "google_1234",
           // campaign: "Summer_fun",
-          source: data.utm_source,
-          medium: data.utm_medium,
-          term: data.utm_term,
+          source: getData.utm_source,
+          medium: getData.utm_medium,
+          term: getData.utm_term,
           // content: "logolink",
-          session_id: data.sessionId,
+          session_id: getData.sessionId,
           //engagement_time_msec: "100",
-          ipAddress: data.ipAddress,
-          lineUid: data.lineUid,
-          client_id: data.client_id,
-          uniqueEventId: data.uniqueEventId,
-          sessionId: data.sessionId,
-          userId: data.userId,
-          userAgent: data.userAgent,
+          ipAddress: getData.ipAddress,
+          lineUid: getData.lineUid,
+          client_id: getData.client_id,
+          uniqueEventId: getData.uniqueEventId,
+          sessionId: getData.sessionId,
+          userId: getData.userId,
+          userAgent: getData.userAgent,
           timeStamp: date,
         },
       },
