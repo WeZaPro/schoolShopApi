@@ -4,7 +4,26 @@ const axios = require("axios");
 require("dotenv").config();
 
 // user audience =====> start
-exports.createUserAudience = async (req, res) => {
+exports.createUserAudience = (req, res) => {
+  // console.log("Path createUserAudience req.body---> ", req.body);
+  // console.log(
+  //   "Path createUserAudience req.body.utm_source---> ",
+  //   req.body.utm_source
+  // );
+  // console.log(
+  //   "Path createUserAudience req.body.utm_medium---> ",
+  //   req.body.utm_medium
+  // );
+  // console.log(
+  //   "Path createUserAudience req.body.utm_term---> ",
+  //   req.body.utm_term
+  // );
+
+  // console.log(
+  //   "Path createUserAudience req.body.ipAddress---> ",
+  //   req.body.ipAddress
+  // );
+  // Validate request
   if (!req.body.ipAddress) {
     res.status(400).send({ message: "ipAddress can not be empty!" });
     return;
@@ -26,18 +45,18 @@ exports.createUserAudience = async (req, res) => {
 
   // check cookiesUid in db
   //console.log("userId ==> ", req.body.userId);
-  await userAudience.findOne(
+  userAudience.findOne(
     // Todo Filter from audience เปลี่ยนจาก IP เป็น userId (cookies) เพราะใช้ ip มันเปลี่ยนไปมา น่าจะมาจาก router wifi
     // { ipAddress: req.body.ipAddress },
     { ipAddress: req.body.ipAddress }, // from gtm api
 
     // { userId: "1704613370490" },
-    async function (err, _ipAddress) {
+    function (err, _ipAddress) {
       //console.log("FIND DATA*********==>", _ipAddress);
       //console.log("ipAddressWebStart*********==>", req.body.ipAddressWebStart);
       if (!_ipAddress) {
         console.log("Not Found botUserId ==>SAVE DATA ");
-        await _userAudience
+        _userAudience
           .save()
           .then((data) => {
             console.log("save-> ", data);
@@ -136,7 +155,7 @@ exports.findLineUidSendToGA = async (req, res) => {
     });
 };
 
-async function sendDataGA(getData, res) {
+function sendDataGA(getData, res) {
   const date = new Date();
   // const _measurement_id = "G-75KFFSMBKP";
   // const _api_secret = "nk_Kg0X7R5W8hERJRekynQ";
@@ -185,7 +204,7 @@ async function sendDataGA(getData, res) {
     data: data,
   };
 
-  await axios
+  axios
     .request(config)
     .then((response) => {
       console.log("send event from liffApp to GA4");

@@ -9,7 +9,7 @@ exports.getChat = (req, res) => {
   res.status(200).send({ message: "Send from chat bot" });
 };
 
-exports.chat = async (req, res) => {
+exports.chat = (req, res) => {
   const lineChatBot = new LineBot({
     userId: req.body.events[0].source.userId,
     inputMessage: req.body.events[0].message.text,
@@ -17,7 +17,7 @@ exports.chat = async (req, res) => {
   //Todo -> find user id from db=> req.body.events[0].source.userId
   //Todo -> yes -> next | no -> save to db
 
-  await LineBot.findOne(
+  LineBot.findOne(
     { userId: req.body.events[0].source.userId },
     function (err, _userId) {
       console.log("_userId => ", _userId);
