@@ -10,96 +10,104 @@ exports.getChat = (req, res) => {
 };
 
 exports.chat = (req, res) => {
-  const lineChatBot = new LineBot({
-    userId: req.body.events[0].source.userId,
-    inputMessage: req.body.events[0].message.text,
-  });
-  //Todo -> find user id from db=> req.body.events[0].source.userId
-  //Todo -> yes -> next | no -> save to db
+  try {
+    const lineChatBot = new LineBot({
+      userId: req.body.events[0].source.userId,
+      inputMessage: req.body.events[0].message.text,
+    });
+    //Todo -> find user id from db=> req.body.events[0].source.userId
+    //Todo -> yes -> next | no -> save to db
 
-  LineBot.findOne(
-    { userId: req.body.events[0].source.userId },
-    function (err, _userId) {
-      console.log("_userId => ", _userId);
-      console.log(
-        "req.body.events[0].message.text  => ",
-        req.body.events[0].message.text
-      );
+    LineBot.findOne(
+      { userId: req.body.events[0].source.userId },
+      function (err, _userId) {
+        console.log("_userId => ", _userId);
+        console.log(
+          "req.body.events[0].message.text  => ",
+          req.body.events[0].message.text
+        );
 
-      //Todo รับข้อความจาก Liff -> เช็คว่าใช่คำว่า "START"
-      if (req.body.events[0].message.text === "START") {
-        //Todo save db
-        lineChatBot
-          .save()
-          .then((data) => {
-            console.log("save-> ", data);
-            res.send(data);
-          })
-          .catch((err) => {
-            res.status(500).send({
-              message:
-                err.message ||
-                "Some error occurred while creating the Tutorial.",
+        //Todo รับข้อความจาก Liff -> เช็คว่าใช่คำว่า "START"
+        if (req.body.events[0].message.text === "START") {
+          //Todo save db
+          lineChatBot
+            .save()
+            .then((data) => {
+              console.log("save-> ", data);
+              res.send(data);
+            })
+            .catch((err) => {
+              res.status(500).send({
+                message:
+                  err.message ||
+                  "Some error occurred while creating the Tutorial.",
+              });
             });
-          });
-      } else {
-        if (_userId === null) {
-          //Todo send message confirm save
-          confirmSaveDb(req, res, channelAccessToken);
         } else {
-          console.log("req.body.events[0].--> ", req.body.events[0]);
+          if (_userId === null) {
+            //Todo send message confirm save
+            confirmSaveDb(req, res, channelAccessToken);
+          } else {
+            console.log("req.body.events[0].--> ", req.body.events[0]);
+          }
         }
       }
-    }
-  );
+    );
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 function confirmSaveDb(req, res, channelAccessToken) {
-  const lineUserId = req.body.events[0].source.userId;
-  if (req.body.events[0].message.type === "text") {
-    // not stricker
+  try {
+    const lineUserId = req.body.events[0].source.userId;
+    if (req.body.events[0].message.type === "text") {
+      // not stricker
 
-    const dataString = JSON.stringify({
-      replyToken: req.body.events[0].replyToken,
-      //   messages: samplePayload(),
+      const dataString = JSON.stringify({
+        replyToken: req.body.events[0].replyToken,
+        //   messages: samplePayload(),
 
-      messages: setRegister(lineUserId),
+        messages: setRegister(lineUserId),
 
-      //   ],
-    });
-
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + channelAccessToken,
-    };
-
-    const webhookOptions = {
-      hostname: "api.line.me",
-      path: "/v2/bot/message/reply",
-      method: "POST",
-      headers: headers,
-      body: dataString,
-    };
-
-    const request = https.request(webhookOptions, (res) => {
-      res.on("data", (d) => {
-        process.stdout.write(d);
+        //   ],
       });
-    });
 
-    request.on("error", (err) => {
-      console.error(err);
-    });
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + channelAccessToken,
+      };
 
-    request.write(dataString);
-    request.end();
+      const webhookOptions = {
+        hostname: "api.line.me",
+        path: "/v2/bot/message/reply",
+        method: "POST",
+        headers: headers,
+        body: dataString,
+      };
 
-    //=====> end
-  } else {
-    console.log("message type = !text");
-    res.status(200).send({
-      message: "message type = !text",
-    });
+      const request = https.request(webhookOptions, (res) => {
+        res.on("data", (d) => {
+          process.stdout.write(d);
+        });
+      });
+
+      request.on("error", (err) => {
+        console.error(err);
+      });
+
+      request.write(dataString);
+      request.end();
+
+      //=====> end
+    } else {
+      console.log("message type = !text");
+      res.status(200).send({
+        message: "message type = !text",
+      });
+    }
+  } catch (err) {
+    console.log(err);
   }
 }
 
