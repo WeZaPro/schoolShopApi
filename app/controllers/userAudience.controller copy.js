@@ -144,9 +144,9 @@ exports.findLineUidSendToGA = async (req, res) => {
   await userAudience
     .findOne({ lineUid: _lineUid })
     .then((data) => {
-      console.log("get data from db-->:", data);
+      console.log("data :", data);
       // send to GA4
-      sendDataGA(data, res);
+      sendDataGA(res);
       //res.send(data);
     })
     .catch((err) => {
@@ -154,39 +154,37 @@ exports.findLineUidSendToGA = async (req, res) => {
     });
 };
 
-function sendDataGA(data, res) {
-  const date = new Date();
+function sendDataGA(res) {
   // const _measurement_id = "G-75KFFSMBKP";
   // const _api_secret = "nk_Kg0X7R5W8hERJRekynQ";
   const _measurement_id = process.env.measurement_id;
   const _api_secret = process.env.api_secret;
   let data = JSON.stringify({
-    client_id: data.client_id,
+    client_id: "123456.7654321",
     user_properties: {
       ipAddress: {
-        value: data.ipAddress,
+        value: "223.204.238.149",
       },
     },
     events: [
       {
         name: process.env.event_tag,
         params: {
-          // campaign_id: "google_1234",
-          // campaign: "Summer_fun",
-          source: data.utm_source,
-          medium: data.utm_medium,
-          term: data.utm_term,
-          // content: "logolink",
-          session_id: data.sessionId,
-          //engagement_time_msec: "100",
-          ipAddress: data.ipAddress,
-          lineUid: data.lineUid,
-          client_id: data.client_id,
-          uniqueEventId: data.uniqueEventId,
-          sessionId: data.sessionId,
-          userId: data.userId,
-          userAgent: data.userAgent,
-          timeStamp: date,
+          campaign_id: "google_1234",
+          campaign: "Summer_fun",
+          source: "google",
+          medium: "cpc",
+          term: "summer+travel",
+          content: "logolink",
+          session_id: "123",
+          engagement_time_msec: "100",
+          ipAddress: "223.204.238.149",
+          lineUid: "U634375582d774e1c8ce69c31f6f1ba52",
+          client_id: "123456.7654321",
+          uniqueEventId: "uni_100010001",
+          sessionId: "sess_100010001",
+          userId: "100010001",
+          userAgent: "userAgent1234",
         },
       },
     ],
