@@ -17,7 +17,7 @@ exports.chat = async (req, res) => {
   //Todo -> find user id from db=> req.body.events[0].source.userId
   //Todo -> yes -> next | no -> save to db
 
-  LineBot.findOne(
+  await LineBot.findOne(
     { userId: req.body.events[0].source.userId },
     function (err, _userId) {
       console.log("_userId => ", _userId);
