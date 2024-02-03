@@ -4,24 +4,24 @@ const axios = require("axios");
 
 // user audience =====> start
 exports.createUserAudience = (req, res) => {
-  console.log("Path createUserAudience req.body---> ", req.body);
-  console.log(
-    "Path createUserAudience req.body.utm_source---> ",
-    req.body.utm_source
-  );
-  console.log(
-    "Path createUserAudience req.body.utm_medium---> ",
-    req.body.utm_medium
-  );
-  console.log(
-    "Path createUserAudience req.body.utm_term---> ",
-    req.body.utm_term
-  );
+  // console.log("Path createUserAudience req.body---> ", req.body);
+  // console.log(
+  //   "Path createUserAudience req.body.utm_source---> ",
+  //   req.body.utm_source
+  // );
+  // console.log(
+  //   "Path createUserAudience req.body.utm_medium---> ",
+  //   req.body.utm_medium
+  // );
+  // console.log(
+  //   "Path createUserAudience req.body.utm_term---> ",
+  //   req.body.utm_term
+  // );
 
-  console.log(
-    "Path createUserAudience req.body.ipAddress---> ",
-    req.body.ipAddress
-  );
+  // console.log(
+  //   "Path createUserAudience req.body.ipAddress---> ",
+  //   req.body.ipAddress
+  // );
   // Validate request
   if (!req.body.ipAddress) {
     res.status(400).send({ message: "ipAddress can not be empty!" });
@@ -42,7 +42,7 @@ exports.createUserAudience = (req, res) => {
   });
 
   // check cookiesUid in db
-  console.log("userId ==> ", req.body.userId);
+  //console.log("userId ==> ", req.body.userId);
   userAudience.findOne(
     // Todo Filter from audience เปลี่ยนจาก IP เป็น userId (cookies) เพราะใช้ ip มันเปลี่ยนไปมา น่าจะมาจาก router wifi
     // { ipAddress: req.body.ipAddress },
@@ -50,8 +50,8 @@ exports.createUserAudience = (req, res) => {
 
     // { userId: "1704613370490" },
     function (err, _ipAddress) {
-      console.log("FIND DATA*********==>", _ipAddress);
-      console.log("ipAddressWebStart*********==>", req.body.ipAddressWebStart);
+      //console.log("FIND DATA*********==>", _ipAddress);
+      //console.log("ipAddressWebStart*********==>", req.body.ipAddressWebStart);
       if (!_ipAddress) {
         console.log("Not Found botUserId ==>SAVE DATA ");
         _userAudience
@@ -180,6 +180,7 @@ function sendDataGA(res) {
           uniqueEventId: "uni_100010001",
           sessionId: "sess_100010001",
           userId: "100010001",
+          userAgent: "userAgent1234",
         },
       },
     ],
