@@ -31,6 +31,7 @@ exports.createUserAudience = (req, res) => {
   const _userAudience = new userAudience({
     userId: req.body.userId,
     client_id: req.body.client_id,
+    lineUid: req.body.lineUid,
     userAgent: req.body.userAgent,
     ipAddress: req.body.ipAddress,
     uniqueEventId: req.body.uniqueEventId,
