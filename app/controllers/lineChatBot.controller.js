@@ -7,10 +7,13 @@ const liff = require("@line/liff");
 let channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
 
 exports.getChat = (req, res) => {
+  console.log("GET CHAT----->");
   res.status(200).send({ message: "Send from chat bot" });
 };
 
 exports.chat = (req, res) => {
+  console.log("CHAT----->");
+  console.log("req.body.events----->", req.body.events);
   try {
     const lineChatBot = new LineBot({
       userId: req.body.events[0].source.userId,

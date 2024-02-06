@@ -142,8 +142,13 @@ exports.findIpAndUpdate = async (req, res) => {
         new: true,
       })
       .then((data) => {
-        res.send(data);
-        console.log("data--> ", data);
+        if (data) {
+          res.send(data);
+          console.log("***** data--> ", data);
+        } else {
+          res.send("******not found data");
+          console.log("******not found data--> ", data);
+        }
       });
   } catch (err) {
     console.log(err);
