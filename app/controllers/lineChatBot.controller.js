@@ -4,7 +4,7 @@ const LineBot = db.getMessage;
 require("dotenv").config();
 const liff = require("@line/liff");
 // let channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
-let channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN_SCHOOL_SHOP;
+let channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
 
 exports.getChat = (req, res) => {
   res.status(200).send({ message: "Send from chat bot" });
